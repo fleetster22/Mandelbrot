@@ -12,7 +12,7 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     private double xPos = 0;
     private double yPos = 0;
     private double zx, zy, cX, cY, tmp;
-    private int maxIterations = 140;
+    private int maxIterations = 80;
     private int xMouseStart = 0;
     private int xMouseEnd = 0;
     private int yMouseStart = 0;
@@ -48,9 +48,9 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     		cY = yPos + (y-modHeight) * zoom; //canvas
     		
     		int iteration;
-    		for(iteration = 0; iteration < maxIterations && zx*zx+zy*zy < 20; iteration++) {
+    		for(iteration = 0; iteration < maxIterations && zx*zx+zy*zy < 15; iteration++) {
     			tmp = zx * zx - zy * zy + cX;
-    			zy = 2.6 * zx * zy + cY;
+    			zy = 2 * zx * zy + cY;
     			zx = tmp;
     		}   
     		if(iteration == maxIterations) {
@@ -58,17 +58,17 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     		}else {
     			
 
-    			double r = iteration | (iteration << 5);
+    			double r = iteration | (iteration << 3);
     			while(r > 255) {
     				r -= 255;
     			}
     			
-    			double g = iteration | (iteration << 3);
+    			double g = iteration | (iteration << 5);
     			while(g > 255) {
     				g -= 255;
     			}
     			
-    			double b = iteration | (iteration << 4);
+    			double b = iteration | (iteration << 3);
     			while(b > 255) {
     				b -= 255;
     			}
@@ -157,6 +157,23 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
         		maxIterations -= 5;
         		compute();
         }
+        if(e.getKeyCode()== KeyEvent.VK_LEFT){
+        	xPos += 12 * zoom;
+    		compute();
+        }
+        if(e.getKeyCode()== KeyEvent.VK_RIGHT){
+        	xPos -= 12 * zoom;
+    		compute();
+        }
+        if(e.getKeyCode()== KeyEvent.VK_UP){
+        	yPos += 12 * zoom;
+        	compute();
+        }
+        if(e.getKeyCode()== KeyEvent.VK_DOWN){
+        	yPos -= 12 * zoom;
+        	compute();
+        }
+        
     }
 
     @Override
@@ -168,10 +185,13 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     public void mouseWheelMoved(MouseWheelEvent e) {
     	int notches =e.getWheelRotation();
     	if(notches < 0) {
-    		System.out.println("Mouse wheel moved up " + -notches + " notches.");
+    		//System.out.println("Mouse wheel moved up " + -notches + " notches.");
+    		zoom *= 0.95;
     	} else {
-    		System.out.println("Mouse wheel moved down " + notches + " notches.");
+    		//System.out.println("Mouse wheel moved down " + notches + " notches.");
+    		zoom *= 1.04;
     	}
+    	compute();
 
     }
 
