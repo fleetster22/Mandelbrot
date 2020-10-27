@@ -12,7 +12,7 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     private double xPos = 0;
     private double yPos = 0;
     private double zx, zy, cX, cY, tmp;
-    private int maxIterations = 80;
+    private int maxIterations = 60;
     private int xMouseStart = 0;
     private int xMouseEnd = 0;
     private int yMouseStart = 0;
@@ -50,7 +50,7 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     		int iteration;
     		for(iteration = 0; iteration < maxIterations && zx*zx+zy*zy < 15; iteration++) {
     			tmp = zx * zx - zy * zy + cX;
-    			zy = 2 * zx * zy + cY;
+    			zy = 3 * zx * zy + cY;
     			zx = tmp;
     		}   
     		if(iteration == maxIterations) {
@@ -58,17 +58,17 @@ public class Application extends JFrame implements MouseListener, KeyListener, M
     		}else {
     			
 
-    			double r = iteration | (iteration << 3);
+    			double r = iteration | (iteration << 1);
     			while(r > 255) {
     				r -= 255;
     			}
     			
-    			double g = iteration | (iteration << 5);
+    			double g = iteration | (iteration << 3);
     			while(g > 255) {
     				g -= 255;
     			}
     			
-    			double b = iteration | (iteration << 3);
+    			double b = iteration | (iteration << 5);
     			while(b > 255) {
     				b -= 255;
     			}
